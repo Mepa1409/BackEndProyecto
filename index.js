@@ -9,19 +9,19 @@ app.use(cors());
 
 const PORT = process.env.PORT || 3000;
 
-// 📌 Ruta para recibir datos de sensores
+// 📌 Ruta para recibir datos de sensores  
 app.post("/api/sensores", async (req, res) => {
   try {
-    const { temperatura, humedad, gas_row, bateria, fecha_insertion, hora_insertion } = req.body;
+    const { temperatura, humedad, gas_row, ch4, co, lpg, bateria, fecha_insertion, hora_insertion } = req.body;
 
-    if (!temperatura || !humedad || !gas_row || bateria === undefined || !fecha_insertion || !hora_insertion) {
+    if (!temperatura || !humedad || !gas_row || ch4 === undefined || co === undefined || lpg === undefined || bateria === undefined || !fecha_insertion || !hora_insertion) {
       return res.status(400).json({ error: "Faltan datos en la solicitud" });
     }
 
-    const query = `INSERT INTO sensores (temperatura, humedad, gas_row, bateria, fecha_insertion, hora_insertion) 
-                   VALUES ($1, $2, $3, $4, $5, $6)`;
+    const query = `INSERT INTO sensores (temperatura, humedad, gas_row, ch4, co, lpg, bateria, fecha_insertion, hora_insertion) 
+                   VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`;
 
-    const values = [temperatura, humedad, gas_row, bateria, fecha_insertion, hora_insertion];
+    const values = [temperatura, humedad, gas_row, ch4, co, lpg, bateria, fecha_insertion, hora_insertion];
 
     await pool.query(query, values);
     res.json({ message: "✅ Datos guardados correctamente" });
